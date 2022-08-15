@@ -1,0 +1,10 @@
+version: "3"
+services:
+  gmail-clone-frontend:
+    build: ./app
+    user: "node"
+    command: npm run dev -- --host
+    volumes:
+      - ./app:/usr/src/app
+    ports:
+      - "8080:3000"
