@@ -10,6 +10,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type EmailStore interface {
@@ -28,6 +29,8 @@ func main() {
 	store := filesystem_store.NewFileSystemEmailStore(db)
 
 	e := echo.New()
+
+	e.Use(middleware.CORS())
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World")
