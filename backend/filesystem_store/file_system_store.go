@@ -7,11 +7,20 @@ import (
 
 type FileSystemEmailStore struct {
 	database io.ReadWriteSeeker
-	emails   []models.Email
+	inbox    models.Inbox
 }
 
-func (f *FileSystemEmailStore) GetEmails() []models.Email {
-	return f.emails
+func (f *FileSystemEmailStore) GetEmails() models.Inbox {
+	return f.inbox
+}
+
+func (f *FileSystemEmailStore) GetEmail(id int) *models.Email {
+	email := f.inbox.Find(id)
+
+	if email != nil {
+		return email
+	}
+	return nil
 }
 
 func NewFileSystemEmailStore(database io.ReadWriteSeeker) *FileSystemEmailStore {
@@ -20,6 +29,6 @@ func NewFileSystemEmailStore(database io.ReadWriteSeeker) *FileSystemEmailStore 
 
 	return &FileSystemEmailStore{
 		database: database,
-		emails:   emails,
+		inbox:    emails,
 	}
 }

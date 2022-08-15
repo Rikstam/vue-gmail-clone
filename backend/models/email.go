@@ -9,11 +9,22 @@ import (
 type Email struct {
 	Id       int    `json:"id" xml:"id"`
 	From     string `json:"from" xml:"from"`
-	Subject  string `json:"subjext" xml:"subject"`
+	Subject  string `json:"subject" xml:"subject"`
 	Body     string `json:"body" xml:"body"`
 	SentAt   string `json:"sentAt" xml:"sentAt"`
 	Archived bool   `json:"archived" xml:"archived"`
 	Read     bool   `json:"read" xml:"read"`
+}
+
+type Inbox []Email
+
+func (inbox Inbox) Find(id int) *Email {
+	for index, email := range inbox {
+		if email.Id == id {
+			return &inbox[index]
+		}
+	}
+	return nil
 }
 
 func NewEmails(reader io.Reader) ([]Email, error) {
