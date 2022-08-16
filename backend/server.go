@@ -51,5 +51,21 @@ func main() {
 		return json.NewEncoder(c.Response()).Encode(&email)
 	})
 
+	e.PUT("/emails/:id", func(c echo.Context) error {
+		id, _ := strconv.Atoi(c.Param("id"))
+
+		email := new(models.Email)
+
+		if err := c.Bind(email); err != nil {
+			return err
+		}
+
+		newEmail := store.UpdateEmail(id, email)
+
+		c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSONCharsetUTF8)
+		c.Response().WriteHeader(http.StatusOK)
+		return json.NewEncoder(c.Response()).Encode(&newEmail)
+	})
+
 	e.Logger.Fatal(e.Start(":1323"))
 }

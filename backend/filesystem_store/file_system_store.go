@@ -23,6 +23,17 @@ func (f *FileSystemEmailStore) GetEmail(id int) *models.Email {
 	return nil
 }
 
+func (f *FileSystemEmailStore) UpdateEmail(id int, newEmail *models.Email) *models.Email {
+	email := f.inbox.Find(id)
+
+	if email != nil {
+		email.Read = newEmail.Read
+		email.Archived = newEmail.Archived
+		return email
+	}
+	return nil
+}
+
 func NewFileSystemEmailStore(database io.ReadWriteSeeker) *FileSystemEmailStore {
 	database.Seek(0, 0)
 	emails, _ := models.NewEmails(database)
