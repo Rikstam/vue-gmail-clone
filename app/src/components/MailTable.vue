@@ -4,7 +4,7 @@
         <tr v-for="email in unarchivedEmails"
             :key="email.id"
             :class="['clickable', email.read ? 'read' : '']"
-            @click="readEmail(email)">
+            @click="openEmail(email)">
           <td><input type="checkbox"/></td>
           <td>{{email.from}}</td>
           <td>
@@ -15,46 +15,51 @@
           </tr>
     </tbody>
   </table>
+  <MailView v-if="openedEmail" :email="openedEmail"/>
 </template>
 
 <script>
 import { ref } from 'vue';
 import axios from 'axios';
 import { format } from 'date-fns';
+import MailView from './MailView.vue';
 
 export default {
     async setup() {
-
-    const {data: emails} = await axios.get('http://localhost:1323/emails/');
-   
-    return {
-      format,
-      emails: ref(emails),
-    }
-  },
-  methods: {
-    readEmail(email) {
-      email.read = true;
-      this.updateEmail(email);
-       
+        const { data: emails } = await axios.get("http://localhost:1323/emails/");
+        return {
+            format,
+            emails: ref(emails),
+            openedEmail: ref(null),
+        };
     },
-    archiveEmail(email) {
-      email.archived = true;
-      this.updateEmail(email);
+    components: {
+      MailView,
     },
-    updateEmail(email) {
-      axios.put(`http://localhost:1323/emails/${email.id}`, email)
-    }
-  },
-  computed: {
-    sortedEmails() {
-      return this.emails.sort((e1, e2) => {
-        return e1.sentAt < e2.sentAt ? 1 : -1
-      })
+    methods: {
+        openEmail(email) {
+            email.read = true;
+            this.updateEmail(email);
+            this.openedEmail = email;
+        },
+        archiveEmail(email) {
+            email.archived = true;
+            this.updateEmail(email);
+        },
+        updateEmail(email) {
+            axios.put(`http://localhost:1323/emails/${email.id}`, email);
+        }
     },
-    unarchivedEmails() {
-      return this.sortedEmails.filter(e => !e.archived)
-    }
-  }
+    computed: {
+        sortedEmails() {
+            return this.emails.sort((e1, e2) => {
+                return e1.sentAt < e2.sentAt ? 1 : -1;
+            });
+        },
+        unarchivedEmails() {
+            return this.sortedEmails.filter(e => !e.archived);
+        }
+    },
+    components: { MailView }
 }
 </script>
