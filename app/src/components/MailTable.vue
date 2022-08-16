@@ -15,7 +15,9 @@
           </tr>
     </tbody>
   </table>
-  <MailView v-if="openedEmail" :email="openedEmail"/>
+  <ModalView v-if="openedEmail" @closeModal="openedEmail = null">
+    <MailView :email="openedEmail"/>
+  </ModalView>
 </template>
 
 <script>
@@ -23,6 +25,7 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { format } from 'date-fns';
 import MailView from './MailView.vue';
+import ModalView from './ModalView.vue';
 
 export default {
     async setup() {
@@ -60,6 +63,6 @@ export default {
             return this.sortedEmails.filter(e => !e.archived);
         }
     },
-    components: { MailView }
+    components: { MailView, ModalView }
 }
 </script>
