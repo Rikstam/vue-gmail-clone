@@ -10,6 +10,13 @@
 <script>
 export default {
     setup(props, { emit }) {
+        const onKeydown = (event) => {
+
+            if (event.key == 'Escape') {
+                emit('closeModal');
+            }
+        }
+        window.addEventListener('keydown', onKeydown)
         return {
             emit
         }
