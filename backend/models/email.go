@@ -27,8 +27,8 @@ func (inbox Inbox) Find(id int) *Email {
 	return nil
 }
 
-func NewEmails(reader io.Reader) ([]Email, error) {
-	var emails []Email
+func NewEmails(reader io.Reader) (Inbox, error) {
+	var emails Inbox
 
 	err := json.NewDecoder(reader).Decode(&emails)
 
