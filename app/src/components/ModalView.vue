@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { onBeforeMount } from 'vue';
 export default {
     setup(props, { emit }) {
         const onKeydown = (event) => {
@@ -17,6 +18,9 @@ export default {
             }
         }
         window.addEventListener('keydown', onKeydown)
+        onBeforeMount(()=> {
+            window.removeEventListener('keydown', onKeydown)
+        })
         return {
             emit
         }
