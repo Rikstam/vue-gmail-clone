@@ -1,6 +1,7 @@
 package main
 
 import (
+	"gmail-clone-backend/config"
 	"gmail-clone-backend/handler"
 	"gmail-clone-backend/models"
 	"net/http"
@@ -14,9 +15,11 @@ type EmailStore interface {
 	GetEmail(id int) models.Email
 }
 
-const dbFileName = "db.json"
-
 func main() {
+
+	var store = config.InitStore()
+
+	emailHandler := handler.Handler{Store: store}
 
 	e := echo.New()
 
@@ -26,11 +29,11 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World")
 	})
 
-	e.GET("/emails/", handler.GetEmails)
+	e.GET("/emails/", emailHandler.GetEmails)
 
-	e.GET("/emails/:id", handler.GetEmail)
+	e.GET("/emails/:id", emailHandler.GetEmail)
 
-	e.PUT("/emails/:id", handler.UpdateEmail)
+	e.PUT("/emails/:id", emailHandler.UpdateEmail)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

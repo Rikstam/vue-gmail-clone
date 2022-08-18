@@ -2,7 +2,7 @@ package handler
 
 import (
 	"encoding/json"
-	"gmail-clone-backend/config"
+	"gmail-clone-backend/filesystem_store"
 	"gmail-clone-backend/models"
 	"net/http"
 	"strconv"
@@ -10,18 +10,20 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var store = config.InitStore()
+type Handler struct {
+	Store *filesystem_store.FileSystemEmailStore
+}
 
-func GetEmails(c echo.Context) error {
-	emails := store.GetEmails()
+func (h *Handler) GetEmails(c echo.Context) error {
+	emails := h.Store.GetEmails()
 	c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSONCharsetUTF8)
 	c.Response().WriteHeader(http.StatusOK)
 	return json.NewEncoder(c.Response()).Encode(&emails)
 }
 
-func GetEmail(c echo.Context) error {
+func (h *Handler) GetEmail(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	email := store.GetEmail(id)
+	email := h.Store.GetEmail(id)
 
 	if email == nil {
 		return echo.NewHTTPError(http.StatusNotFound, "email not found")
@@ -32,7 +34,7 @@ func GetEmail(c echo.Context) error {
 	return json.NewEncoder(c.Response()).Encode(&email)
 }
 
-func UpdateEmail(c echo.Context) error {
+func (h *Handler) UpdateEmail(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	email := new(models.Email)
@@ -41,7 +43,7 @@ func UpdateEmail(c echo.Context) error {
 		return err
 	}
 
-	newEmail := store.UpdateEmail(id, email)
+	newEmail := h.Store.UpdateEmail(id, email)
 
 	c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSONCharsetUTF8)
 	c.Response().WriteHeader(http.StatusOK)
