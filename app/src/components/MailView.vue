@@ -20,9 +20,9 @@ import axios from 'axios';
 import useKeyDown from '../composables/use-keydown';
 
 export default {
-    setup(props) {
+    setup(props, {emit}) {
         const email = props.email
-        const toggleRead = () => {
+        /*const toggleRead = () => {
             email.read = !email.read
             axios.put(`http://localhost:1323/emails/${email.id}`, email);
         }
@@ -37,10 +37,40 @@ export default {
 
         const goOlder = () => {
             console.log('go older')
-        }
+        } */
+
+        const toggleRead = () => {
+            emit('changeEmail', {
+                toggleRead: true,
+                save: true
+                })}
+        const toggleArchive = () => {
+            emit('changeEmail', {
+                toggleArchive: true,
+                save: true,
+                closeModal: true
+                })}
+        const goNewer = () => {emit('changeEmail', {changeIndex: -1})}
+        const goOlder = () => {emit('changeEmail', {changeIndex: 1})}
+        
+        const goNewerAndArchive = () => {emit('changeEmail', {
+            changeIndex: -1,
+            toggleArchive: true,
+            save: true,
+            })}
+        const goOlderAndArchive = () => {emit('changeEmail', {
+            changeIndex: 1,
+            toggleArchive: true,
+            save: true,
+            })}
+        
         useKeyDown([
             {key: 'r', fn: toggleRead},
             {key: 'e', fn: toggleArchive},
+            {key: 'k', fn: goNewer},
+            {key: 'j', fn: goOlder},
+            {key: '[', fn: goNewerAndArchive},
+            {key: ']', fn: goOlderAndArchive},
         ])
         return {
             format,
