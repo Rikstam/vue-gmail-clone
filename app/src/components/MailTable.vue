@@ -36,9 +36,6 @@ export default {
             openedEmail: ref(null),
         };
     },
-    components: {
-      MailView,
-    },
     methods: {
         openEmail(email) {
             email.read = true;
@@ -56,7 +53,7 @@ export default {
     computed: {
         sortedEmails() {
             return this.emails.sort((e1, e2) => {
-                return e1.sentAt < e2.sentAt ? 1 : -1;
+                return (e1.sentAt < e2.sentAt) ? 1 : -1;
             });
         },
         unarchivedEmails() {
