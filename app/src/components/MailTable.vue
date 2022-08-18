@@ -1,5 +1,4 @@
 <template>
-<h1>{{emailSelection.emails.size}} emails selected</h1>
 <table class="mail-table">
     <tbody>
         <tr v-for="email in unarchivedEmails"
@@ -26,32 +25,21 @@
 
 <script>
 import { ref } from 'vue';
-import { reactive } from 'vue';
 import axios from 'axios';
 import { format } from 'date-fns';
-import MailView from './MailView.vue';
-import ModalView from './ModalView.vue';
+import MailView from '../components/MailView.vue';
+import ModalView from '../components/ModalView.vue';
+import useEmailSelection from '../composables/use-email-selection'
 
 export default {
-    async setup() {
+    async setup () {
         const { data: emails } = await axios.get("http://localhost:1323/emails/");
-        const selected = reactive(new Set());
-        const emailSelection = {
-            emails: selected,
-            toggle(email) {
-                if(selected.has(email)) {
-                    selected.delete(email);
-                } else {
-                    selected.add(email);
-                }
-            }
-        }
-
+       
         return {
             format,
             emails: ref(emails),
             openedEmail: ref(null),
-            emailSelection
+            emailSelection: useEmailSelection()
         };
     },
     methods: {
