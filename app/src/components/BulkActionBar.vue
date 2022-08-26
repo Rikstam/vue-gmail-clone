@@ -28,9 +28,9 @@ export default {
     setup(props) {
         const emailSelection = useEmailSelection()
         const numberSelected =  computed(() => emailSelection.emails.size)
-        const numberEmails = props.emails.length
-        const allEmailsSelected = computed(() => numberSelected.value === numberEmails) // need to reference with .value as numberSelected is a reactive property
-        const someEmailsSelected = computed(() => numberSelected.value > 0 && numberSelected.value < numberEmails)
+        const numberEmails = computed(() => props.emails.length)
+        const allEmailsSelected = computed(() => numberSelected.value === numberEmails.value) // need to reference with .value as numberSelected and numberEmails arereactive properties
+        const someEmailsSelected = computed(() => numberSelected.value > 0 && numberSelected.value < numberEmails.value)
         
         const bulkSelect = () => {
             if (allEmailsSelected.value) {

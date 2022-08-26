@@ -1,8 +1,17 @@
 <template>
-<BulkActionBar :emails="unarchivedEmails" />
+
+<button @click="selectScreen('inbox')"
+        :disabled="selectedScreen == 'inbox'"
+>Inbox</button>
+
+<button @click="selectScreen('archive')"
+        :disabled="selectedScreen == 'archive'"
+>Archived</button>
+
+<BulkActionBar :emails="filteredEmails" />
 <table class="mail-table">
     <tbody>
-        <tr v-for="email in unarchivedEmails"
+        <tr v-for="email in filteredEmails"
             :key="email.id"
             :class="['clickable', email.read ? 'read' : '']"
             >
@@ -34,7 +43,7 @@ import useEmailSelection from '../composables/use-email-selection'
 import BulkActionBar from './BulkActionBar.vue';
 
 export default {
-    components: { MailView, ModalView, BulkActionBar, BulkActionBar },
+    components: { MailView, ModalView, BulkActionBar },
     async setup () {
         const { data: emails } = await axios.get("http://localhost:1323/emails/");
        
@@ -42,10 +51,15 @@ export default {
             format,
             emails: ref(emails),
             openedEmail: ref(null),
-            emailSelection: useEmailSelection()
+            emailSelection: useEmailSelection(),
+            selectedScreen: ref('inbox')
         };
     },
     methods: {
+        selectScreen(newScreen) {
+            this.selectedScreen = newScreen
+            this.emailSelection.clear()
+        },
         openEmail(email) {
              this.openedEmail = email;
             if (email) {
@@ -69,7 +83,7 @@ export default {
             if(closeModal) { this.openedEmail = null }
 
             if (changeIndex) {
-                const emails = this.unarchivedEmails;
+                const emails = this.filteredEmails;
                 const currentIndex = emails.indexOf(this.openedEmail)
                 const newEmail = emails[currentIndex + changeIndex]
                 this.openEmail(newEmail);
@@ -82,8 +96,12 @@ export default {
                 return (e1.sentAt < e2.sentAt) ? 1 : -1;
             });
         },
-        unarchivedEmails() {
-            return this.sortedEmails.filter(e => !e.archived);
+        filteredEmails() {
+            if(this.selectedScreen == 'inbox') {
+                return this.sortedEmails.filter(e => !e.archived);
+            } else {
+                return this.sortedEmails.filter(e => e.archived);
+            }
         }
     }
 }
