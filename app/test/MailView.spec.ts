@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { mount } from '@vue/test-utils'
 import { format } from 'date-fns';
-import { marked } from 'marked';
 
 import MailView from '../src/components/MailView.vue'
 
