@@ -1,3 +1,10 @@
+<script setup>
+import MailTable from './components/MailTable.vue';
+import useEmailSelection from './composables/use-email-selection';
+
+const emailSelection = useEmailSelection()
+
+</script>
 <template>
   <h1>VMail Inbox</h1>
   <Suspense>
@@ -9,22 +16,6 @@
     </template>
   </Suspense>
 </template>
-  
-<script>
-import MailTable from './components/MailTable.vue';
-import useEmailSelection from './composables/use-email-selection';
-export default {
-  name: 'App',
-  components: {
-    MailTable,
-  },
-  setup() {
-    return {
-        emailSelection: useEmailSelection()
-      }
-  }
-};
-</script>
 
 <style>
 </style>
