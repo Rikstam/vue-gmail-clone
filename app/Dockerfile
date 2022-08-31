@@ -10,6 +10,8 @@ COPY ./package-lock.json .
 
 RUN npm install
 
+RUN npm install -g json-server
+
 COPY . .
 
 #CMD [ "npm", "run", "dev" ]

@@ -6,9 +6,9 @@
         <button @click="goNewer">Newer (k)</button>
         <button @click="goOlder">Older (j)</button>
     </div>
-    <h2 class="mb-0">Subject: <strong>{{email.subject}}</strong></h2>
-    <div><em>From {{email.from}} on  {{format(new Date(email.sentAt), 'MMM do yyyy')}} </em></div>
-    <div v-html="marked.parse(email.body)"></div>
+    <h2  data-test="email-subject" class="mb-0">Subject: <strong>{{email.subject}}</strong></h2>
+    <div data-test="email-from"><em>From {{email.from}} on  {{format(new Date(email.sentAt), 'MMM do yyyy')}} </em></div>
+    <div data-test="email-body" v-html="marked.parse(email.body)"></div>
 </div>
 </template>
 
