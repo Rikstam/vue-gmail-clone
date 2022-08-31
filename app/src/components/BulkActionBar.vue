@@ -21,37 +21,23 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import useEmailSelection from '../composables/use-email-selection';
-import { computed } from 'vue';
-export default {
-    setup(props) {
-        const emailSelection = useEmailSelection()
-        const numberSelected =  computed(() => emailSelection.emails.size)
-        const numberEmails = computed(() => props.emails.length)
-        const allEmailsSelected = computed(() => numberSelected.value === numberEmails.value) // need to reference with .value as numberSelected and numberEmails arereactive properties
-        const someEmailsSelected = computed(() => numberSelected.value > 0 && numberSelected.value < numberEmails.value)
-        
-        const bulkSelect = () => {
-            if (allEmailsSelected.value) {
-                emailSelection.clear()
-            } else {
-                emailSelection.addMultiple(props.emails)
-            }
-        }
-        return {
-            allEmailsSelected,
-            someEmailsSelected,
-            bulkSelect,
-            emailSelection,
-            numberSelected
-        }
-    },
-    props: {
-        emails: {
-            type: Array,
-            required: true
-        }
+import { computed, defineProps } from 'vue';
+
+const props = defineProps(['emails'])
+
+const emailSelection = useEmailSelection()
+const numberSelected =  computed(() => emailSelection.emails.size)
+const numberEmails = computed(() => props.emails.length)
+const allEmailsSelected = computed(() => numberSelected.value === numberEmails.value) // need to reference with .value as numberSelected and numberEmails arereactive properties
+const someEmailsSelected = computed(() => numberSelected.value > 0 && numberSelected.value < numberEmails.value)
+
+const bulkSelect = () => {
+    if (allEmailsSelected.value) {
+        emailSelection.clear()
+    } else {
+        emailSelection.addMultiple(props.emails)
     }
 }
 </script>

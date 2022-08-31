@@ -7,21 +7,17 @@
 </div>
 </template>
 
-<script>
+<script setup>
 
 import useKeyDown from '../composables/use-keydown.js'
+import { defineEmits } from 'vue'
 
-export default {
-    setup(props, { emit }) {
-        useKeyDown([
-            {key:'Escape',fn: () => {emit('closeModal')}},
-            {key:'Enter', fn: () => {console.log('pressed Enter')}}
-        ])
-        return {
-            emit
-        }
-    }
-}
+const emit = defineEmits(['closeModal'])
+
+useKeyDown([
+    {key:'Escape',fn: () => {emit('closeModal')}},
+    {key:'Enter', fn: () => {console.log('pressed Enter')}}
+])
 </script>
 
 <style scoped>

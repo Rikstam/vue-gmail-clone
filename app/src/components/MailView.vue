@@ -12,80 +12,46 @@
 </div>
 </template>
 
-<script>
+<script setup>
 import { format } from 'date-fns';
 import { marked } from 'marked';
-import axios from 'axios';
+import { defineProps, defineEmits } from 'vue';
 
 import useKeyDown from '../composables/use-keydown';
+const emit = defineEmits(['changeEmail'])
+const props = defineProps(['email'])
 
-export default {
-    setup(props, {emit}) {
-        const email = props.email
-        /*const toggleRead = () => {
-            email.read = !email.read
-            axios.put(`http://localhost:1323/emails/${email.id}`, email);
-        }
-        const toggleArchive = () => {
-            email.archived = !email.archived
-            axios.put(`http://localhost:1323/emails/${email.id}`, email);
-        }
+const toggleRead = () => {
+    emit('changeEmail', {
+        toggleRead: true,
+        save: true
+    })}
+const toggleArchive = () => {
+    emit('changeEmail', {
+        toggleArchive: true,
+        save: true,
+        closeModal: true
+        })}
+const goNewer = () => {emit('changeEmail', {changeIndex: -1})}
+const goOlder = () => {emit('changeEmail', {changeIndex: 1})}
 
-        const goNewer = () => {
-            console.log('go newer')
-        }
-
-        const goOlder = () => {
-            console.log('go older')
-        } */
-
-        const toggleRead = () => {
-            emit('changeEmail', {
-                toggleRead: true,
-                save: true
-                })}
-        const toggleArchive = () => {
-            emit('changeEmail', {
-                toggleArchive: true,
-                save: true,
-                closeModal: true
-                })}
-        const goNewer = () => {emit('changeEmail', {changeIndex: -1})}
-        const goOlder = () => {emit('changeEmail', {changeIndex: 1})}
+const goNewerAndArchive = () => {emit('changeEmail', {
+    changeIndex: -1,
+    toggleArchive: true,
+    save: true,
+    })}
+const goOlderAndArchive = () => {emit('changeEmail', {
+    changeIndex: 1,
+    toggleArchive: true,
+    save: true,
+    })}
         
-        const goNewerAndArchive = () => {emit('changeEmail', {
-            changeIndex: -1,
-            toggleArchive: true,
-            save: true,
-            })}
-        const goOlderAndArchive = () => {emit('changeEmail', {
-            changeIndex: 1,
-            toggleArchive: true,
-            save: true,
-            })}
-        
-        useKeyDown([
-            {key: 'r', fn: toggleRead},
-            {key: 'e', fn: toggleArchive},
-            {key: 'k', fn: goNewer},
-            {key: 'j', fn: goOlder},
-            {key: '[', fn: goNewerAndArchive},
-            {key: ']', fn: goOlderAndArchive},
-        ])
-        return {
-            format,
-            toggleRead,
-            toggleArchive,
-            goNewer,
-            goOlder,
-            marked
-        }
-    },
-    props: {
-        email: {
-            type: Object,
-            required: true,
-        }
-    }
-}
+useKeyDown([
+    {key: 'r', fn: toggleRead},
+    {key: 'e', fn: toggleArchive},
+    {key: 'k', fn: goNewer},
+    {key: 'j', fn: goOlder},
+    {key: '[', fn: goNewerAndArchive},
+    {key: ']', fn: goOlderAndArchive},
+])
 </script>
