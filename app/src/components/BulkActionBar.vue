@@ -21,11 +21,13 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import useEmailSelection from '../composables/use-email-selection';
 import { computed, defineProps } from 'vue';
+import { EmailItem } from '../types'
 
-const props = defineProps(['emails'])
+
+const props = defineProps<{emails: EmailItem[]}>()
 
 const emailSelection = useEmailSelection()
 const numberSelected =  computed(() => emailSelection.emails.size)

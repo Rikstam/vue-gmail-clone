@@ -42,15 +42,7 @@ import ModalView from '../components/ModalView.vue';
 import useEmailSelection from '../composables/use-email-selection'
 import BulkActionBar from './BulkActionBar.vue';
 
-interface EmailItem {
-    id: number;
-    from: string;
-    subject: string;
-    body: string;
-    sentAt:string;
-    archived: boolean;
-    read: boolean;
-}
+import { EmailItem, changeEmailEventParams } from '../types';
 
 const result = await axios.get("http://localhost:1323/emails/");
 const emails = reactive<EmailItem[]>(result.data)
@@ -80,7 +72,7 @@ const updateEmail = (email: EmailItem) => {
     axios.put(`http://localhost:1323/emails/${email.id}`, email);
 }
 
-const changeEmail = ({toggleRead, toggleArchive, save, closeModal, changeIndex}) => {
+const changeEmail = ({toggleRead, toggleArchive, save, closeModal, changeIndex}: changeEmailEventParams) => {
     if (openedEmail) {
         const email = openedEmail;
         if(toggleRead) { email.value.read = !email.value.read }

@@ -12,14 +12,24 @@
 </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { format } from 'date-fns';
 import { marked } from 'marked';
 import { defineProps, defineEmits } from 'vue';
 
 import useKeyDown from '../composables/use-keydown';
-const emit = defineEmits(['changeEmail'])
-const props = defineProps(['email'])
+import { EmailItem, changeEmailEventParams } from '../types'
+
+const emit = defineEmits<{
+    (event: 'changeEmail', {
+        toggleRead,
+        save,
+        toggleArchive,
+        changeIndex,
+        closeModal
+    }: changeEmailEventParams): void;
+}>()
+const props = defineProps<{email: EmailItem}>()
 
 const toggleRead = () => {
     emit('changeEmail', {

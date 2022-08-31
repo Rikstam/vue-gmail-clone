@@ -7,12 +7,12 @@
 </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 import useKeyDown from '../composables/use-keydown.js'
 import { defineEmits } from 'vue'
 
-const emit = defineEmits(['closeModal'])
+const emit = defineEmits<{(event: 'closeModal'):void;}>()
 
 useKeyDown([
     {key:'Escape',fn: () => {emit('closeModal')}},
