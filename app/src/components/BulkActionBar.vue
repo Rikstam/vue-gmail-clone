@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import useEmailSelection from '../composables/use-email-selection';
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 import { EmailItem } from '../types'
 
 

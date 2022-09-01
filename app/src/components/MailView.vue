@@ -1,7 +1,7 @@
 <template>
 <div class="email-display">
     <div>
-        <button @click="toggleArchive">{{email.archived ? 'Move to Inbox (e)' : 'Move to Archive (e)'}}</button>
+        <button data-test="toggle-archived" @click="toggleArchive">{{email.archived ? 'Move to Inbox (e)' : 'Move to Archive (e)'}}</button>
         <button @click="toggleRead">{{email.read ? 'Mark Unread (r)' : 'Mark Read (r)'}}</button>
         <button @click="goNewer">Newer (k)</button>
         <button @click="goOlder">Older (j)</button>
@@ -15,7 +15,6 @@
 <script setup lang="ts">
 import { format } from 'date-fns';
 import { marked } from 'marked';
-import { defineProps, defineEmits } from 'vue';
 
 import useKeyDown from '../composables/use-keydown';
 import { EmailItem, changeEmailEventParams } from '../types'
